@@ -53,7 +53,7 @@ def consume_messages(consumer, pushToTopic):
             Storing the messages in list for the duration of 1 minute. Then processing it for total and unique users.
         '''
 
-        if time_stmp_min != message.value['ts'] and False:
+        if time_stmp_min != message.value['ts']:
             process_list_uids(time_stmp_min,message.value['ts'], ts_min_lst, pushToTopic, duraton='minute')
             ts_min_lst= []
             time_stmp_min= message.value['ts']
@@ -68,7 +68,7 @@ def consume_messages(consumer, pushToTopic):
             ts_hr_lst= []
             time_stmp_hr= message_ts_hr
 
-        #ts_min_lst.append(message.value['uid'])
+        ts_min_lst.append(message.value['uid'])
         ts_hr_lst.append(message.value['uid'])
         count+=1
 
@@ -111,10 +111,12 @@ def consume_messages_hll(consumer, pushToTopic):
         '''
             Storing the messages in list for the duration of 1 minute. Then processing it for total and unique users.
         '''
-
-        if time_stmp_min != message.value['ts'] and False:
-            process_list_uids(time_stmp_min,message.value['ts'], ts_min_lst, pushToTopic, duraton='minute')
-            ts_min_lst= []
+        if time_stmp_min != message.value['ts'] :
+            total = i - cnt_min
+            unique = len(ts_min_lst)
+            cnt_min = i
+            process_list_uids_hll(time_stmp_min,message.value['ts'], unique, total, pushToTopic, duraton='minute')
+            ts_min_lst= hyperloglog.HyperLogLog(0.01)
             time_stmp_min= message.value['ts']
 
         ''' 
@@ -124,11 +126,13 @@ def consume_messages_hll(consumer, pushToTopic):
         if time_stmp_hr != message_ts_hr:
             total= i-cnt_hr
             unique= len(ts_hr_lst)
-            process_list_uids_hll(convert_to_unix_time(time_stmp_hr), convert_to_unix_time(message_ts_hr), total, unique ,  pushToTopic, duraton='10 minutes')
+            cnt_hr = i
+            process_list_uids_hll(convert_to_unix_time(time_stmp_hr), convert_to_unix_time(message_ts_hr), unique , total, pushToTopic, duraton='10 minutes')
             ts_hr_lst= hyperloglog.HyperLogLog(0.01)
             time_stmp_hr= message_ts_hr
 
-        #ts_min_lst.add(message.value['uid'])
+
+        ts_min_lst.add(message.value['uid'])
         ts_hr_lst.add(message.value['uid'])
 
         if i%50000 == 0:
