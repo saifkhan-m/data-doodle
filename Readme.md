@@ -22,5 +22,8 @@ Create a consumer to process the frames in the topic.
 Processed the data and created a counting mechanism to calculate users per minute.
 
 
+### sTEP 5
+Push the results of metrics to a new topic in KAfaka
+
 
 
