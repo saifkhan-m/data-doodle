@@ -25,5 +25,14 @@ Processed the data and created a counting mechanism to calculate users per minut
 ### sTEP 5
 Push the results of metrics to a new topic in KAfaka
 
+HLL
+
+Parse json once and use that to calculate unique users per duration. duration can be different
+
+
+Memory profiler
+The applicatioon uses memory-profiler library to check the memory used by the functions.
+
+
 
 

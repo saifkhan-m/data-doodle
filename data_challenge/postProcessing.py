@@ -23,8 +23,9 @@ def process_list_uids(time_stmp_strt, time_stmp_end, lst_of_uid, pushToTopic,  d
     #print(msgJSON)
     pushToTopic.push(msgJSON)
 
-
-
+def process_list_uids_hll(time_stmp_strt, time_stmp_end, uniqueUIDs, totalUIDs, pushToTopic, duraton='minute'):
+    msgJSON =createJson(duraton, time_stmp_strt, time_stmp_end, totalUIDs, uniqueUIDs)
+    pushToTopic.push(msgJSON)
 
 def roundTime(dt=None, roundTo=60):
    """Round a datetime object to any time lapse in seconds
