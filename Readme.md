@@ -46,14 +46,14 @@ I created 2 different approaches to count the unique `UID`s.
  -  **HyperLogLog** (`HLL`): I realized that memory requirement to store `UID`s for a longer duration would require a lot of memory. Therefore, I used the `HLL` algorithm to keep the application's memory footprint as low as possible. Memory is not an issue for small durations but will take huge dumps of memory if the `duration` is 24 hours.
  
 Some benchmarks can be seen below. We can see that the memory required to complete the counting of users per minute and 10 minutes(both calculated in the same run) is less in the case of HLL with almost the same amount of time. So the HLL algorithm takes 40% less memory than the naive approach.
-> 
-> ----------List processing-------
+```
+----------List processing-------
  Maximum memory usage: 91.98046875
 Time taken by list DS 73.11751055717468
 ----------HLL algorithm-------
 Maximum memory usage: 55.58984375
 Time taken by list HLL 74.02316451072693
-
+```
 I have also implemented a performance measurement that measures the time to process `n` messages and write the processing time to a text file (implemented with `n`=50000). We can use a watcher over this file and create a dashboard that shows the time to process `n` messages. The value of `n` is configurable, and this will help to monitor a problem if the time to process `n` events exceeds that of average time. The output to a text file can be replaced with output to a database or maybe even a topic in Kafka.
 
 ### Step 5: Output
